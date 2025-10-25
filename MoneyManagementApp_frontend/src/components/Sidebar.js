@@ -1,8 +1,8 @@
 import "../styles/sidebarStyle.css";
-import "../components/buttonComponent";
-import ButtonComponent from "../components/buttonComponent";
+import "../components/ButtonComponent";
+import ButtonComponent from "../components/ButtonComponent";
 
-function sidebar() {
+function Sidebar() {
   const items = [
     { text: "Accounts", icon: "/resources/category.png" },
     { text: "Dashboard", icon: "/resources/chart-square.png" },
@@ -23,4 +23,4 @@ function sidebar() {
   );
 }
 
-export default sidebar;
+export default Sidebar;

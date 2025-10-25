@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
-import sidebar from "./components/sidebar";
+import Window from "./components/Window";
 
 function App() {
   const [message, setMessage] = useState("Default");
@@ -12,19 +12,7 @@ function App() {
     'useState('')' - seteaza valoarea initiala a starii (in cazul meu un string gol"")
   */
 
-  // useEffect(() => {
-  //   //trimite un request la url-ul meu ca sa ia textul de acolo sau ce e nevoie
-  //    fetch("http://localhost:8080/home")
-  //   .then(response => response.text())   // așteaptă să se convertească în text
-  //   .then(my_text => setMessage(my_text))  // actualizează state-ul React
-  //   .catch(error => console.error("Eroare la fetch:", error));
-  // },[])
-
-  // return (
-  //   <h1>Mesajul meu este: {message}</h1>
-  // );
-
-  return sidebar();
+  return <Window />;
 }
 
 export default App;
