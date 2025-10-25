@@ -1,9 +1,10 @@
-function buttonComponent(text) {
+function ButtonComponent({ text, icon }) {
   return (
-    <div>
-      <button>{text}</button>
-    </div>
+    <button className="side-bar-btn">
+      <img src={icon} className="side-bar-button-image" />
+      <span className="side-bar-button-text">{text}</span>
+    </button>
   );
 }
 
-export default buttonComponent;
+export default ButtonComponent;
