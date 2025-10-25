@@ -1,12 +1,12 @@
 .sidebar {
   width: 220px;
-  background-color: #0f172a; /* dark navy */
-  padding: 16px 0;
+  background-color: #1d1b1b;
+  padding: 16px 16px 16px 0px;
   height: 100vh;
 }
 
 .list-group-item {
-  margin: 4px 0;
+  margin: 10px -10px;
   border: none;
   background: none;
 }
@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 16px;
+  padding: 10px 0px;
   border-radius: 8px;
   background: transparent;
   color: #9da1a7;
@@ -28,13 +28,14 @@
 }
 
 .side-bar-btn:hover {
-  background-color: #1e293b;
+  background-color: #424750;
   color: #e2e8f0;
 }
 
 .side-bar-button-image {
   width: 20px;
   height: 20px;
+  padding-left: 1cap;
   object-fit: contain;
 }
 
