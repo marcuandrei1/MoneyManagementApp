@@ -1,7 +1,7 @@
 function ContentWindow() {
   return (
     <div className="content-window">
-      <h>hellow</h>
+      <h1>hellow</h1>
     </div>
   );
 }

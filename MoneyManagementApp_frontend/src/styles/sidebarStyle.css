@@ -1,11 +1,11 @@
 .sidebar {
-  width: 220px;
+  /* width: 220px; */
   background-color: #1d1b1b;
   padding: 16px 16px 16px 0px;
-  height: 100vh;
+  /* height: 100vh; */
 
-  grid-row-start: 1;
-  grid-row-end: 4;
+  grid-row: 1 / span 2;
+  grid-column: 1;
 }
 
 .list-group-item {
