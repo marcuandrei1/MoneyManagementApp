@@ -3,12 +3,16 @@
   background-color: #1d1b1b;
   padding: 16px 16px 16px 0px;
   height: 100vh;
+
+  grid-row-start: 1;
+  grid-row-end: 4;
 }
 
 .list-group-item {
   margin: 10px -10px;
   border: none;
   background: none;
+  list-style-type: none;
 }
 
 .side-bar-btn {
