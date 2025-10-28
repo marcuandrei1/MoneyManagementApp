@@ -3,7 +3,7 @@ import "../styles/topbarStyle.css";
 function Topbar() {
   return (
     <div className="top-bar">
-      <h1>First element</h1>
+      <h1>MoneyManagementApp</h1>
     </div>
   );
 }

@@ -1,8 +1,11 @@
 .top-bar {
-  background-color: red;
-  color: white;
+  background-color: #1d1b1b;
+  grid-column: 2 / span 3; /* stă în coloana 2 */
+  grid-row: 1; /* primul rând */
+
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
+  padding-left: 10px;
+  color: #ffffff;
+  font-size: 12px;
 }

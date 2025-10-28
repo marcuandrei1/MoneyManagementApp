@@ -1,6 +1,6 @@
 .window {
   display: grid;
-  grid-template-columns: 220px 1fr; /* Sidebar + restul */
-  grid-template-rows: 60px 1fr; /* Topbar + content */
+  grid-template-columns: 220px auto; /* Sidebar + restul */
+  grid-template-rows: 60px auto; /* Topbar + content */
   height: 100vh;
 }

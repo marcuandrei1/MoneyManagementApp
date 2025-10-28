@@ -1,12 +1,13 @@
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import ContentWindow from "./ContentWindow";
+import "../styles/windowStyle.css";
 
 function Window() {
   return (
     <div className="window">
-      <Sidebar />
       <Topbar />
+      <Sidebar />
       <ContentWindow />
     </div>
   );

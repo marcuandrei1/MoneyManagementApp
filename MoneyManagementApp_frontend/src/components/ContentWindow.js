@@ -1,3 +1,5 @@
+import "../styles/contentwindowStyle.css";
+
 function ContentWindow() {
   return (
     <div className="content-window">
