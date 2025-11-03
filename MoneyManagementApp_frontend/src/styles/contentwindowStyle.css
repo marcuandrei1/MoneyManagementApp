@@ -1,5 +1,5 @@
 .content-window {
-  background-color: blue;
+  background-color: #15181e;
   grid-column: 2 / span 3;
   grid-row: 2 / span 3;
 }

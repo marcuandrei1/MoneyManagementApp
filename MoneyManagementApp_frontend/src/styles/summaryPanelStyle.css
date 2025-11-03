@@ -1,0 +1,45 @@
+.summary-panel {
+  background-color: #171b20;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  width: calc(100% - 30px);
+  height: 200px;
+  margin-right: 500px;
+}
+
+.left-card {
+  text-align: left;
+  width: 50%;
+}
+
+.left-card-title {
+  font-size: 20px;
+  padding: 20px 0 0 60px;
+  color: #99a1a7;
+}
+
+.left-card-text {
+  font-size: 32px;
+  font-weight: bold;
+  padding: 0 0 0 60px;
+  color: #e1e3e4;
+}
+
+.right-card {
+  text-align: left;
+  width: 50%;
+}
+
+.right-card-title {
+  font-size: 20px;
+  padding: 20px 0 0 40px;
+  color: #99a1a7;
+}
+
+.right-card-text {
+  padding: 0 0 0 40px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #48a473;
+}
