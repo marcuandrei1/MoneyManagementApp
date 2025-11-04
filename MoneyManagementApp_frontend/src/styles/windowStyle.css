@@ -3,4 +3,10 @@
   grid-template-columns: 220px auto; /* Sidebar + restul */
   grid-template-rows: 60px auto; /* Topbar + content */
   height: 100vh;
+
+  transition: grid-template-columns 0.3s ease;
+}
+
+.window.sidebar-minimized {
+  grid-template-columns: 100px auto;
 }

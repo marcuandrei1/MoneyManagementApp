@@ -2,4 +2,5 @@
   background-color: #15181e;
   grid-column: 2 / span 3;
   grid-row: 2 / span 3;
+  margin-left: 15px;
 }
