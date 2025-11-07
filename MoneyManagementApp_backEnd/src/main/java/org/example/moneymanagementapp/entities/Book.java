@@ -1,4 +1,4 @@
-package org.example.moneymanagementapp.controller;
+package org.example.moneymanagementapp.entities;
 import jakarta.persistence.*;
 
 @Entity

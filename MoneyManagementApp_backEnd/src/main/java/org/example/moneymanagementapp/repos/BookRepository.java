@@ -1,5 +1,6 @@
-package org.example.moneymanagementapp.controller;
+package org.example.moneymanagementapp.repos;
 
+import org.example.moneymanagementapp.entities.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

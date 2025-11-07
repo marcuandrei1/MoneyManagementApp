@@ -1,6 +1,8 @@
 package org.example.moneymanagementapp.controller;
 
 
+import org.example.moneymanagementapp.entities.Book;
+import org.example.moneymanagementapp.services.BookService;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.*;
 

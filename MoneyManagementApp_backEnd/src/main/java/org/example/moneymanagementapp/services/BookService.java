@@ -1,5 +1,7 @@
-package org.example.moneymanagementapp.controller;
+package org.example.moneymanagementapp.services;
 
+import org.example.moneymanagementapp.repos.BookRepository;
+import org.example.moneymanagementapp.entities.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 
