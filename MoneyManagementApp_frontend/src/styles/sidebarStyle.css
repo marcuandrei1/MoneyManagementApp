@@ -4,6 +4,53 @@
 
   grid-row: 1 / span 4; /* Ocupă ambele rânduri */
   grid-column: 1;
+
+  width: 100%; /* Instead of 250px, just fill the container */
+  transition: padding 0.3s ease; /* REMOVE 'width' from the transition */
+  overflow: hidden;
+}
+
+.sidebar.minimized {
+  width: 100%; /* The new, smaller width */
+  padding: 50px 5px 15px 10px; /* Adjust padding for the smaller size */
+}
+
+.sidebar.minimized .side-bar-button-text {
+  display: none;
+}
+
+.sidebar.minimized .side-bar-btn {
+  justify-content: center;
+  width: 100%;
+}
+
+/* This styles the new toggle button to match your dark theme */
+.toggle-btn {
+  width: 95%;
+  display: flex;
+  justify-content: center; /* Center the "«" or "»" */
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  margin-bottom: 15px; /* Add some space below it */
+  border-radius: 8px;
+  background: #11151b; /* Match your .side-bar-btn */
+  color: #9da1a7; /* Match your .side-bar-btn */
+  font-size: 20px; /* Make the arrow icon a good size */
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.toggle-btn:hover {
+  background-color: #424750; /* Match your .side-bar-btn:hover */
+  color: #e2e8f0;
+}
+
+/* Make the toggle button fill the space when minimized */
+.sidebar.minimized .toggle-btn {
+  width: 100%;
 }
 
 .list-group-item {
