@@ -1,0 +1,42 @@
+.accounts-container {
+  padding: 24px;
+  color: white;
+}
+
+.accounts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.add-transaction-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.add-transaction-btn:hover {
+  background: #1d4ed8;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.transactions-table th,
+.transactions-table td {
+  padding: 14px 16px;
+}
+
+.transactions-table tbody tr:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
