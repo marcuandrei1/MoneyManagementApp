@@ -21,22 +21,22 @@
 
 .sidebar.minimized .side-bar-btn {
   justify-content: center;
-  width: 100%;
+  width: fit-content;
 }
 
-/* This styles the new toggle button to match your dark theme */
 .toggle-btn {
-  width: 95%;
+  width: fit-content;
+  margin-left: auto;
   display: flex;
-  justify-content: center; /* Center the "«" or "»" */
+  justify-content: center; 
   align-items: center;
   gap: 12px;
   padding: 10px;
-  margin-bottom: 15px; /* Add some space below it */
+  margin-bottom: 15px;
   border-radius: 8px;
-  background: #11151b; /* Match your .side-bar-btn */
-  color: #9da1a7; /* Match your .side-bar-btn */
-  font-size: 20px; /* Make the arrow icon a good size */
+  background: #11151b;
+  color: #9da1a7;
+  font-size: 20px; 
   font-weight: 600;
   border: none;
   cursor: pointer;
@@ -44,13 +44,17 @@
 }
 
 .toggle-btn:hover {
-  background-color: #424750; /* Match your .side-bar-btn:hover */
+  background-color: #424750;
   color: #e2e8f0;
 }
 
-/* Make the toggle button fill the space when minimized */
+.toggle-btn img {
+  width: 24px;
+  height: 24px;
+}
+
 .sidebar.minimized .toggle-btn {
-  width: 100%;
+  width: 50%;
 }
 
 .list-group-item {
@@ -85,6 +89,7 @@
   width: 20px;
   height: 20px;
   padding-left: 1cap;
+  padding-right: 1cap;
   object-fit: contain;
 }
 
