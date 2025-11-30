@@ -1,0 +1,85 @@
+.tfw-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.tfw-modal {
+  background: #111827;
+  padding: 24px;
+  border-radius: 12px;
+  width: 420px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  color: #f9fafb;
+}
+
+.tfw-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tfw-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.tfw-close {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.tfw-form label {
+  display: block;
+  margin-bottom: 6px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.tfw-form input,
+.tfw-form select {
+  width: 100%;
+  background: #1a2234;
+  border: 1px solid #2b3445;
+  color: #fff;
+  padding: 7px;
+  border-radius: 8px;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+
+.tfw-row {
+  display: flex;
+  gap: 16px;
+}
+
+.tfw-col {
+  flex: 1;
+}
+
+.tfw-save-btn {
+  width: 100%;
+  background: #3b82f6;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.tfw-save-btn:hover {
+  background: #2563eb;
+}
