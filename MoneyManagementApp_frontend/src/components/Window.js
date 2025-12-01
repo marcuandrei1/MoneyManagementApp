@@ -5,6 +5,7 @@ import ContentWindow from "./ContentWindow";
 import "../styles/windowStyle.css";
 import SummaryPanel from "./SummaryPanel";
 import AccountsContent from "./AccountsContent";
+import BudgetsContent from "./BudgetsContent";
 
 function Window() {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -29,7 +30,7 @@ function Window() {
           />
         );
       case "Budgets":
-        return <div style={{ color: "white" }}>Budgets Content Goes Here</div>; // Replace with <Budgets />
+        return <BudgetsContent />;
       case "Reports":
         return <div style={{ color: "white" }}>Reports Content Goes Here</div>; // Replace with <Reports />
       default:
