@@ -8,6 +8,7 @@ public class GenericTable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private LocalDate transactionDate;
     private String description;
     private String foreignReferenceTable;
@@ -64,5 +65,13 @@ public class GenericTable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
