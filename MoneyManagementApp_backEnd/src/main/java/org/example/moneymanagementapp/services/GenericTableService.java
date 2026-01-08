@@ -30,6 +30,7 @@ public class GenericTableService {
                 ");\n";
         entityManager.createNativeQuery(query).executeUpdate();
     }
+
     public void InsertGenericTable(String tableName, GenericTable genericTable) {
         String query="INSERT INTO "+tableName+"(TRANSACTIONDATE, DESCRIPTION,foreignReferenceTable, SEND, RECEIVE) VALUES\n" +
                 "(?,?,?,?,?)";
@@ -63,16 +64,63 @@ public class GenericTableService {
         preparedQuery.setParameter(2,lastIDT1);
         preparedQuery.executeUpdate();
     }
+
     public void updateGenericTable(String tableName, GenericTable genericTable) {
-        String query="UPDATE "+tableName+" SET TRANSACTIONDATE=?, DESCRIPTION=?, foreignReferenceTable=?, SEND=?, RECEIVE=? ";
-        Query preparedQuery =entityManager.createNativeQuery(query);
+
+        String query = "SELECT foreignReferenceTable, foreignReferenceID FROM " + tableName + " WHERE id=?";
+        Query preparedQuery = entityManager.createNativeQuery(query);
+        preparedQuery.setParameter(1, genericTable.getId());
+        Object[] row = (Object[]) preparedQuery.getSingleResult();
+        String foreignTable = (String) row[0];
+        int foreignID = ((Number) row[1]).intValue();
+        boolean simpleUpdate = (Objects.equals(foreignTable, genericTable.getForeignReferenceTable()));
+
+        query="UPDATE "+ tableName + " SET TRANSACTIONDATE=?, DESCRIPTION=?, foreignReferenceTable=?, SEND=?, RECEIVE=? " + "WHERE id=?";
+        preparedQuery = entityManager.createNativeQuery(query);
         preparedQuery.setParameter(1, genericTable.getTransactionDate());
         preparedQuery.setParameter(2, genericTable.getDescription());
         preparedQuery.setParameter(3, genericTable.getForeignReferenceTable());
         preparedQuery.setParameter(4,genericTable.getSend());
         preparedQuery.setParameter(5,genericTable.getReceive());
+        preparedQuery.setParameter(6,genericTable.getId());
         preparedQuery.executeUpdate();
+
+        if(simpleUpdate){
+            query="UPDATE "+ foreignTable + " SET TRANSACTIONDATE=?, DESCRIPTION=?, foreignReferenceTable=?, SEND=?, RECEIVE=? " + "WHERE id=?";
+            preparedQuery = entityManager.createNativeQuery(query);
+            preparedQuery.setParameter(1, genericTable.getTransactionDate());
+            preparedQuery.setParameter(2, genericTable.getDescription());
+            preparedQuery.setParameter(3, tableName);
+            preparedQuery.setParameter(4,genericTable.getReceive());
+            preparedQuery.setParameter(5,genericTable.getSend());
+            preparedQuery.setParameter(6, foreignID);
+            preparedQuery.executeUpdate();
+        }else{
+            query = "DELETE FROM " + foreignTable + " WHERE id=?";
+            preparedQuery = entityManager.createNativeQuery(query);
+            preparedQuery.setParameter(1, foreignID);
+            preparedQuery.executeUpdate();
+
+            query = "INSERT INTO " + genericTable.getForeignReferenceTable() + "(transactionDate, description, foreignReferenceTable, foreignReferenceID, send, receive) VALUES (?,?,?,?,?,?)";
+            preparedQuery = entityManager.createNativeQuery(query);
+            preparedQuery.setParameter(1, genericTable.getTransactionDate());
+            preparedQuery.setParameter(2, genericTable.getDescription());
+            preparedQuery.setParameter(3, tableName);
+            preparedQuery.setParameter(4, genericTable.getId());
+            preparedQuery.setParameter(5, genericTable.getReceive());
+            preparedQuery.setParameter(6, genericTable.getSend());
+            preparedQuery.executeUpdate();
+
+            int newForeignID = (int)entityManager.createNativeQuery("SELECT id FROM " + genericTable.getForeignReferenceTable() + " ORDER BY id DESC LIMIT 1").getSingleResult();
+
+            query = "UPDATE " + tableName + " SET foreignReferenceID=? WHERE id=?";
+            preparedQuery = entityManager.createNativeQuery(query);
+            preparedQuery.setParameter(1, newForeignID);
+            preparedQuery.setParameter(2, genericTable.getId());
+            preparedQuery.executeUpdate();
+        }
     }
+
     public void deleteGenericTable(String tableName, int id) {
         String query="SELECT foreignReferenceTable,foreignReferenceID FROM "+tableName+" WHERE id=?";
         Query preparedQuery =entityManager.createNativeQuery(query);
@@ -92,7 +140,7 @@ public class GenericTableService {
     }
 
     public List<GenericTable> getAllGenericTables(String tableName) {
-       return entityManager.createNativeQuery("SELECT transactionDate,description,foreignReferenceTable, send,receive,SUM(receive - send)\n" +
+       return entityManager.createNativeQuery("SELECT id, transactionDate,description,foreignReferenceTable, send,receive,SUM(receive - send)\n" +
                "OVER (ORDER BY transactionDate, id) AS balance\n" +
                "FROM "+tableName +"\n"+
                " ORDER BY transactionDate, id;").getResultList();

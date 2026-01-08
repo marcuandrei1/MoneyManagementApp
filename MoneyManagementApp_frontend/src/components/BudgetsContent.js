@@ -40,7 +40,7 @@ function BudgetsContent() {
       icon: <FaCar />,
       name: "CAR",
       allocated: 300,
-      remaining: 81,
+      remaining: 250,
     },
     {
       icon: <FaTshirt />,
@@ -52,7 +52,7 @@ function BudgetsContent() {
       icon: <FaBolt />,
       name: "Bills",
       allocated: 500,
-      remaining: 444,
+      remaining: 200,
     },
   ];
 

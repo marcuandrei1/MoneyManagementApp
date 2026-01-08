@@ -1,0 +1,20 @@
+# ===== Backend (Java / Gradle) =====
+backend/.gradle/
+backend/build/
+backend/*.log
+backend/**/*.class
+
+# ===== Frontend =====
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.iml
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
