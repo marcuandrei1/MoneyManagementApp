@@ -78,7 +78,7 @@ async function saveTransactionRequest(tableName,transactionDate,description,refe
             <div className="tfw-col">
               <label>Account2</label>
               <select
-                value={account}
+                value={account2}
                 onChange={(e) => setAccount2(e.target.value)}
               >
                 <option>Checking</option>

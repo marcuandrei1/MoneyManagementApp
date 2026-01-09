@@ -12,24 +12,32 @@ function AccountsContent() {
       date: "April 18, 2024",
       description: "Salary",
       account: "Checking",
+      send: "$35.00",
+      receve: "$0.00",
       amount: "$3,000.00",
     },
     {
       date: "April 17, 2024",
       description: "Groceries",
       account: "Debit Card",
+      send: "$35.00",
+      receve: "$0.00",
       amount: "- $150.00",
     },
     {
       date: "April 15, 2024",
       description: "Rent",
       account: "Checking",
+      send: "$35.00",
+      receve: "$0.00",
       amount: "- $1,200.00",
     },
     {
       date: "April 13, 2024",
       description: "Electricity",
       account: "Credit Card",
+      send: "$35.00",
+      receve: "$0.00",
       amount: "- $75.00",
     },
   ];
@@ -104,6 +112,8 @@ function AccountsContent() {
             <th>Date</th>
             <th>Description</th>
             <th>Account</th>
+            <th>Send</th>
+            <th>Receved</th>
             <th>Amount</th>
           </tr>
         </thead>
@@ -113,6 +123,8 @@ function AccountsContent() {
               <td>{item.date}</td>
               <td>{item.description}</td>
               <td>{item.account}</td>
+              <td>{item.send}</td>
+              <td>{item.receve}</td>
               <td>{item.amount}</td>
             </tr>
           ))}
