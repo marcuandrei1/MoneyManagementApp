@@ -7,11 +7,14 @@ import org.example.moneymanagementapp.services.BudgetTableService;
 import org.example.moneymanagementapp.services.GenericTableService;
 import org.example.moneymanagementapp.services.HistoryTableService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000",
+            exposedHeaders = "totalRows"
+)
 @RestController
 @RequestMapping("/tables")
 public class TablesController {
@@ -38,8 +41,8 @@ public class TablesController {
         genericTableService.deleteGenericTable(tableName,id);
     }
     @GetMapping("/getTable/{tableName}")
-    public List<GenericTable> getAllGenericTables(@PathVariable String tableName) {
-        return genericTableService.getAllGenericTables(tableName);
+    public ResponseEntity<List<GenericTable>> getGenericTable(@PathVariable String tableName, @RequestParam int rowsSkip) {
+        return ResponseEntity.ok().header("totalRows",String.valueOf(genericTableService.getNumberOfRows(tableName))).body(genericTableService.getGenericTable(tableName,rowsSkip));
     }
     @PostMapping("/updateTable/{tableName}")
     public void UpdateGenericTable(@PathVariable String tableName, @RequestBody GenericTable genericTable) {
@@ -48,8 +51,8 @@ public class TablesController {
         historyTableService.InsertHistoryTable(historyTable);
     }
     @GetMapping("/getHistoryTable")
-    public List<HistoryTable> getAllGenericTables(@RequestParam int numberOfEntries) {
-        return historyTableService.getRequestedHistoryTables(numberOfEntries);
+    public ResponseEntity<List<HistoryTable>> getAllGenericTables(@RequestParam int numberOfEntries, @RequestParam int rowsSkip) {
+        return ResponseEntity.ok().header("totalRows",String.valueOf(historyTableService.getNNumberOfRows())).body( historyTableService.getRequestedHistoryTables(numberOfEntries,rowsSkip));
     }
 
     @PostMapping("/setTableBudget")

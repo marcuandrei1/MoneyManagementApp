@@ -14,6 +14,8 @@ public class HistoryTable {
     private String originalTable;
     private LocalDate transactionDate;
     private String description;
+
+    @Column(name = "foreignReferenceTable")
     private String foreignReferenceTable;
     private int send;
     private int receive;

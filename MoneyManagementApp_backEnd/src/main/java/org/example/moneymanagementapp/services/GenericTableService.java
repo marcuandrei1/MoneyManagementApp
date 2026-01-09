@@ -138,11 +138,13 @@ public class GenericTableService {
         preparedQuery.setParameter(1, id);
         preparedQuery.executeUpdate();
     }
-
-    public List<GenericTable> getAllGenericTables(String tableName) {
+    public long getNumberOfRows(String tableName){
+        return (long) entityManager.createNativeQuery("SELECT COUNT(*) from "+tableName).getSingleResult();
+    }
+    public List<GenericTable> getGenericTable(String tableName,int rowsSkip) {
        return entityManager.createNativeQuery("SELECT id, transactionDate,description,foreignReferenceTable, send,receive,SUM(receive - send)\n" +
                "OVER (ORDER BY transactionDate, id) AS balance\n" +
                "FROM "+tableName +"\n"+
-               " ORDER BY transactionDate, id;").getResultList();
+               " ORDER BY transactionDate, id LIMIT "+rowsSkip+",13;").getResultList();
     }
 }

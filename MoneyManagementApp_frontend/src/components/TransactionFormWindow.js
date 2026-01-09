@@ -2,16 +2,17 @@ import React from "react";
 import { useState } from "react";
 import "../styles/transactionFormWindow.css";
 
-function TransactionFormWindow({ onClose, onSubmit }) {
+function TransactionFormWindow({ onClose, onSubmit, accounts}) {
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
-  const [account, setAccount] = useState("Checking");
+  const [account, setAccount] = useState(accounts.find(type => type !== "Transactions") || "");
+  const [account2,setAccount2]=useState(accounts.find(type => type !== "Transactions") || "");
   const [amount, setAmount] = useState("");
-  const [account2,setAccount2]=useState("");
-
-  const handleSubmit = (e) => {
+  
+  const handleSubmit =async (e) => {
     e.preventDefault();
-    onSubmit({ date, description, account, amount,account2 });
+    await saveTransactionRequest(account, date, description, account2, amount);
+    onSubmit();
   };
 async function saveTransactionRequest(tableName,transactionDate,description,referenceTable,amount) {
   const url = `http://localhost:8080/tables/insertTable/${tableName}`;
@@ -67,24 +68,32 @@ async function saveTransactionRequest(tableName,transactionDate,description,refe
               <label>Account</label>
               <select
                 value={account}
-                onChange={(e) => setAccount(e.target.value)}
+                onChange={(e) => {setAccount(e.target.value); console.log("Selected account:", e.target.value);}
+                  
+                }
               >
-                <option>Checking</option>
-                <option>Debit Card</option>
-                <option>Credit Card</option>
-                <option>Savings</option>
+              {
+                accounts.filter(type =>(type!=="Transactions")).map(type => {
+                  return <option key={type} value={type}>
+                    {type}
+                  </option>
+                })
+              }
               </select>
             </div>
             <div className="tfw-col">
               <label>Account2</label>
               <select
                 value={account2}
-                onChange={(e) => setAccount2(e.target.value)}
+                onChange={(e) => {setAccount2(e.target.value);console.log("Selected account:", e.target.value);}}
               >
-                <option>Checking</option>
-                <option>Debit Card</option>
-                <option>Credit Card</option>
-                <option>Savings</option>
+               {
+                accounts.filter(type =>(type!=="Transactions")).map(type => {
+                  return <option key={type} value={type}>
+                    {type}
+                  </option>
+                })
+              }
               </select>
             </div>
             <div className="tfw-col">
@@ -98,7 +107,7 @@ async function saveTransactionRequest(tableName,transactionDate,description,refe
             </div>
           </div>
 
-          <button type="submit" className="tfw-save-btn"  onClick={()=>saveTransactionRequest("ana",date,description,"marcel",amount)}>
+          <button type="submit" className="tfw-save-btn">
             Save Transaction
           </button>
         </form>

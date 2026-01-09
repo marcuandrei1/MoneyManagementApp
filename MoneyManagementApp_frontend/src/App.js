@@ -10,7 +10,6 @@ function App() {
     'setMessage' - functia care modifica starea (actualizeaza valoarea lui message)
     'useState('')' - seteaza valoarea initiala a starii (in cazul meu un string gol"")
   */
-
   return <Window />;
 }
 

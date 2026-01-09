@@ -20,13 +20,16 @@ public class HistoryTableService {
     public void InsertHistoryTable(HistoryTable historyTable){
         historyTableRepository.save(historyTable);
     }
-
-    public List<HistoryTable> getRequestedHistoryTables(int numberOfRequestedHistoryTables){
-        String query = "SELECT id, action, originalTable, transactionDate,description,foreignReferenceTable, send,receive,SUM(receive - send)\n" +
+    public long getNNumberOfRows(){
+        return historyTableRepository.count();
+    }
+    public List<HistoryTable> getRequestedHistoryTables(int numberOfRequestedHistoryTables,int rowsSkip){
+        String query = "SELECT id,originalTable, transactionDate,description, send,receive,SUM(receive - send)\n" +
                 "OVER (ORDER BY transactionDate, id) AS balance\n" +
-                "FROM (SELECT id, action, originalTable, transactionDate,description,foreignReferenceTable, send,receive FROM history ORDER BY transactionDate, id DESC LIMIT ?) ORDER BY transactionDate, id;";
+                "FROM (SELECT id,originalTable, transactionDate,description,send,receive FROM history ORDER BY transactionDate, id DESC LIMIT ?,?)h ORDER BY transactionDate, id;";
         Query statement = entityManager.createNativeQuery(query);
-        statement.setParameter(1, numberOfRequestedHistoryTables);
+        statement.setParameter(1,rowsSkip);
+        statement.setParameter(2, numberOfRequestedHistoryTables);
         return statement.getResultList();
     }
 
