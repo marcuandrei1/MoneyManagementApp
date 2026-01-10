@@ -20,7 +20,7 @@ public class HistoryTableService {
     public void InsertHistoryTable(HistoryTable historyTable){
         historyTableRepository.save(historyTable);
     }
-    public long getNNumberOfRows(){
+    public long getNumberOfRows(){
         return historyTableRepository.count();
     }
     public List<HistoryTable> getRequestedHistoryTables(int numberOfRequestedHistoryTables,int rowsSkip){

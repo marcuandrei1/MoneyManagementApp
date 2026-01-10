@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "../styles/accountsContentStyle.css";
 import TransactionFormWindow from "./TransactionFormWindow";
+import AccountFormWindow from "./AccountFormWindow";
 import TablePagination from '@mui/material/TablePagination';
 
 function AccountsContent() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState("Transactions");
-  const [showForm, setShowForm] = useState(false);
+  const [accountTypes, setAccountTypes] = useState(["Transactions"]);
+  const [showTransactionForm, setShowTransactionForm] = useState(false);
+  const [showAccountForm, setShowAccountForm] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [transactionsRows, setTransactionsRows] = useState(0);
   const [tablesData, setTablesData]= useState([]);
@@ -26,7 +29,6 @@ function AccountsContent() {
       console.error(error.message);
     }
   }
-
   async function getGenericTable(tableName) {
     const url = `http://localhost:8080/tables/getTable/${tableName}?rowsSkip=${page*13}`;
     try{
@@ -39,16 +41,24 @@ function AccountsContent() {
       console.error(error.message);
     }  
   }
-
-  const accountTypes = [
-    "Transactions",
-    ...new Set(transactions.map((item) => item.account)),
-  ];
  const handleChangePage =(event, newPage) => { 
     setPage(newPage);
   };
   const handleTopDownButtonClick = async () => {
-        setIsDropdownOpen(!isDropdownOpen); // toggle dropdown visibility
+    setIsDropdownOpen(!isDropdownOpen); // toggle dropdown visibility
+  }
+  const getTablesName= async () =>{
+    const url = `http://localhost:8080/tables/getTablesName`;
+    try{
+      const response=await fetch(url);
+      if(!response.ok){
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const data = await response.json();
+      setAccountTypes(["Transactions",...new Set(data)])
+    }catch (error) {
+      console.error(error.message);
+    }  
   }
   const getGenericTableData= async (tableName) =>{
      try {
@@ -99,7 +109,12 @@ function AccountsContent() {
     }
     fetchData();
   }, [page,selectedAccount]); 
-
+  useEffect(() => {
+    const fetchData=async () => {
+      await getTablesName();
+    }
+    fetchData();
+  }, [showAccountForm]); 
   // Filter Logic
   const displayedTransactions =
     selectedAccount === "Transactions"
@@ -107,20 +122,28 @@ function AccountsContent() {
       : tablesData;
 
   const handleCellChange = (rowIndex, field, value) => {
-    displayedTransactions(prev =>
+    setTablesData(prev =>
     prev.map((row, i) =>
       i === rowIndex ? { ...row, [field]: value } : row
     )
   );
 };
-const handleBlurSave = async (row) => {
+const handleBlurSave = async (tableName,row) => {
   setEditing(null); // exit edit mode immediately
-
+  console.log(row);
+  
   try {
-    await fetch("http://localhost:8080/transactions/update", {
-      method: "PUT",
+    await fetch(`http://localhost:8080/tables/updateTable/${tableName}`, {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(row),
+      body:JSON.stringify({ 
+            id : Number(row.id),
+            description: row.description,
+            transactionDate: row.date,
+            foreignReferenceTable: row.account,
+            send:  Number(row.send),
+            receive:  Number(row.receive)
+        }),
     });
   } catch (err) {
     console.error("Failed to save row", err);
@@ -141,6 +164,13 @@ const handleBlurSave = async (row) => {
             >
               ▼
             </button>
+            <button
+              className="add-account-btn"
+              onClick={() => setShowAccountForm(true)}
+            >
+              + Create Account
+            </button>
+    
 
             {isDropdownOpen && (
               <ul className="dropdown-menu">
@@ -163,16 +193,16 @@ const handleBlurSave = async (row) => {
 
         <button
           className="add-transaction-btn"
-          onClick={() => setShowForm(true)}
+          onClick={() => setShowTransactionForm(true)}
         >
           + Add Transaction
         </button>
       </div>
 
-      {showForm && (
+      {showTransactionForm && (
         <TransactionFormWindow
           accounts={accountTypes}
-          onClose={() => setShowForm(false)}
+          onClose={() => setShowTransactionForm(false)}
           onSubmit={async () => {
             if(selectedAccount==="Transactions"){
               await getTransactionData(); 
@@ -180,10 +210,20 @@ const handleBlurSave = async (row) => {
             else{
               await getGenericTableData(selectedAccount);
             } 
-            setShowForm(false);
+            setShowTransactionForm(false);
           }}
         />
       )}
+
+      {showAccountForm && (
+        <AccountFormWindow
+          onClose={() => setShowAccountForm(false)}
+          onSubmit={async () => {
+            setShowAccountForm(false);
+          }}
+        />
+      )}
+
 
       {/* 3. The Table Section (This was missing) */}
       <table className="transactions-table">
@@ -200,16 +240,19 @@ const handleBlurSave = async (row) => {
         <tbody>
           {displayedTransactions.map((item, index) => (
             <tr key={index}>
-              <td>{item.date}</td>
+              <td>
+                {item.date}
+              </td>
               <td onClick={() => setEditing({ rowIndex: index, field: "description" })}>
                 {editing?.rowIndex === index && editing?.field === "description" ? (
                   <input
+                    type="text" 
                     autoFocus
                     value={item.description}
                     onChange={(e) =>
                       handleCellChange(index, "description", e.target.value)
                     }
-                    onBlur={() => handleBlurSave(item)}
+                    onBlur={() => handleBlurSave(selectedAccount,item)}
                   />
                 ) : (
                   item.description

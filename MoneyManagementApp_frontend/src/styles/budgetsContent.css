@@ -54,3 +54,24 @@
   height: 100%;
   border-radius: 5px;
 }
+.pagination-wrapper {
+  display: flex;
+  justify-content: center; /* center horizontally */
+  margin: 20px 0; /* spacing from grid */
+  background-color: #15181e;; /* black background */
+  padding: 10px 0;
+  border-radius: 8px;
+}
+
+.pagination-wrapper .MuiPagination-root {
+  color: #fff; /* white text */
+}
+
+.pagination-wrapper .MuiPaginationItem-root {
+  color: #fff; /* white page numbers */
+}
+
+.pagination-wrapper .Mui-selected {
+  background-color: #1976d2; /* primary blue for selected page */
+  color: #fff;
+}

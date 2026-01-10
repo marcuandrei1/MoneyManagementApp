@@ -30,7 +30,9 @@ public class GenericTableService {
                 ");\n";
         entityManager.createNativeQuery(query).executeUpdate();
     }
-
+    public List<String> getAllGenericTables() {
+        return  entityManager.createNativeQuery("SHOW TABLES WHERE tables_in_test NOT IN ('history', 'budget');").getResultList();
+    }
     public void InsertGenericTable(String tableName, GenericTable genericTable) {
         String query="INSERT INTO "+tableName+"(TRANSACTIONDATE, DESCRIPTION,foreignReferenceTable, SEND, RECEIVE) VALUES\n" +
                 "(?,?,?,?,?)";
@@ -145,6 +147,6 @@ public class GenericTableService {
        return entityManager.createNativeQuery("SELECT id, transactionDate,description,foreignReferenceTable, send,receive,SUM(receive - send)\n" +
                "OVER (ORDER BY transactionDate, id) AS balance\n" +
                "FROM "+tableName +"\n"+
-               " ORDER BY transactionDate, id LIMIT "+rowsSkip+",13;").getResultList();
+               " ORDER BY transactionDate DESC, id DESC LIMIT "+rowsSkip+",13;").getResultList();
     }
 }

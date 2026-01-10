@@ -7,26 +7,25 @@ import jakarta.persistence.*;
 public class BudgetTable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String foreignReferenceTable;
+    private String ReferenceTable;
     private int budgetSum;
+    private int remainingBudget;
 
     public BudgetTable() {
         //generic constructor
     }
 
-    public BudgetTable(String foreignReferenceTable, int budgetSum) {
-        this.foreignReferenceTable = foreignReferenceTable;
+    public BudgetTable(String ReferenceTable, int budgetSum,int remainingBudget) {
+        this.ReferenceTable = ReferenceTable;
         this.budgetSum = budgetSum;
+        this.remainingBudget = remainingBudget;
     }
-
     public String getForeignReferenceTable() {
-        return foreignReferenceTable;
+        return ReferenceTable;
     }
 
     public void setForeignReferenceTable(String foreignReferenceTable) {
-        this.foreignReferenceTable = foreignReferenceTable;
+        this.ReferenceTable = foreignReferenceTable;
     }
 
     public int getBudgetSum() {
@@ -35,5 +34,13 @@ public class BudgetTable {
 
     public void setBudgetSum(int budgetSum) {
         this.budgetSum = budgetSum;
+    }
+
+    public void setRemainingBudget(int remainingBudget) {
+        this.remainingBudget = remainingBudget;
+    }
+
+    public int getRemainingBudget() {
+        return remainingBudget;
     }
 }

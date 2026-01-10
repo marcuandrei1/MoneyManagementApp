@@ -17,16 +17,32 @@ public class BudgetTableService {
     @Autowired
     private BudgetTableRepository budgetTableRepository;
 
-    public List<BudgetTable> getAllBudgetTables() {
-        String query = "SELECT id, foreignReferenceTable, budgetSum\n" +
-                "FROM BudgetTable";
+    public List<BudgetTable> getBudgetTable(int rowsSkip) {
+        String query = "SELECT ReferenceTable, budgetSum, remainingBudget \n" +
+                "FROM budget ORDER BY ReferenceTable LIMIT "+rowsSkip+",15;";
 
-        Query statement = entityManager.createQuery(query);
+        Query statement = entityManager.createNativeQuery(query);
         return statement.getResultList();
     }
-
+    public long getNumberOfRows(){
+        return (long) entityManager.createNativeQuery("SELECT COUNT(*) from budget").getSingleResult();
+    }
     public void InsertBudgetTable(BudgetTable budgetTable) {
         budgetTableRepository.save(budgetTable);
     }
-
+    public void updateRemainingBudget(String tableName,int remainingBudget) {
+        BudgetTable toBeUpdated = budgetTableRepository.findById(tableName).orElse(null);
+        if(toBeUpdated != null) {
+            toBeUpdated.setRemainingBudget(toBeUpdated.getRemainingBudget()+remainingBudget);
+            budgetTableRepository.save(toBeUpdated);
+        }
+    }
+    public  void  updateBudget(String tableName,int budget) {
+        BudgetTable toBeUpdated = budgetTableRepository.findById(tableName).orElse(null);
+        if(toBeUpdated != null) {
+            toBeUpdated.setRemainingBudget(toBeUpdated.getRemainingBudget()+budget-toBeUpdated.getBudgetSum());
+            toBeUpdated.setBudgetSum(budget);
+            budgetTableRepository.save(toBeUpdated);
+        }
+    }
 }

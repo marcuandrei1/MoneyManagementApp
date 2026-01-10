@@ -84,7 +84,17 @@
   font-size: 14px; /* Adjusted slightly to match header proportions */
   font-weight: 500;
 }
-
+.add-account-btn{
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-left: 14px;
+  cursor: pointer;
+  font-size: 14px; /* Adjusted slightly to match header proportions */
+  font-weight: 500;
+}
 .add-transaction-btn:hover {
   background: #1d4ed8;
 }
