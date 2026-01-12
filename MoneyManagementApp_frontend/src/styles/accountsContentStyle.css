@@ -41,22 +41,24 @@
 
 /* 3. The Floating Window (The "Modal") */
 .dropdown-menu {
-  position: absolute; /* Floats on top of content */
-  top: 110%;          /* Pushes it slightly below the button */
-  left: 0;            /* Aligns to the left edge of the button */
-  width: 220px;       /* Fixed width like a menu */
-  
-  background-color: #1f1f1f; /* Deep dark gray (like VS Code) */
-  border: 1px solid #333;    /* Subtle border */
-  border-radius: 6px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* heavy shadow for "pop" */
-  
-  padding: 6px;       /* Inner spacing for the list */
-  list-style: none;   /* Remove bullet points */
-  z-index: 100;       /* Ensures it sits ON TOP of the table */
-  margin: 0;
-}
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 220px;
 
+  background-color: #1f1f1f;
+  border: 1px solid #333;
+  border-radius: 6px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+
+  padding: 6px;
+  list-style: none;
+  z-index: 100;
+  margin: 0;
+
+  max-height: 600px;      /* Limit the height */
+  overflow-y: auto;       /* Scroll if content exceeds max height */
+}
 /* 4. The List Items */
 .dropdown-menu li {
   padding: 8px 12px;

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000",
@@ -83,5 +84,9 @@ public class TablesController {
     @GetMapping("/getNetWorth")
     public BigDecimal getNetWorth() {
         return metadataTableService.getNetWorth();
+    }
+    @GetMapping("/getCashFlow")
+    public HashMap<String, BigDecimal> getCashFlow(){
+        return metadataTableService.getCashFlow();
     }
 }

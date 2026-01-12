@@ -10,6 +10,7 @@ import BudgetsContent from "./BudgetsContent";
 function Dashboard() {
   const [isMinimized, setIsMinimized] = useState(false);
   const [netWorth, setNetWorth] = useState(0);
+  const [cashFlow, setCashFlow] = useState(0);
   const [activeView, setActiveView] = useState("Dashboard");
 
   async function getNetWorth() {
@@ -24,13 +25,26 @@ function Dashboard() {
     }catch (error) {
       console.error(error.message);
     }  
+  }async function getCashFlow() {
+    const url = `http://localhost:8080/tables/getCashFlow`;
+    try{
+      const response=await fetch(url);
+      const data = await response.json();
+      if(!response.ok){
+        throw new Error(`Response status: ${response.status}`);
+      }
+      setCashFlow(data);
+    }catch (error) {
+      console.error(error.message);
+    }  
   }
   useEffect(() => {
       const fetchData=async () => {
-         await getNetWorth(); 
+         await getNetWorth();
+         await getCashFlow(); 
       }
       fetchData();
-    }, []); 
+    }, [activeView]); 
   const handleViewChange = (viewName) => {
     setActiveView(viewName);
   };
@@ -43,9 +57,9 @@ function Dashboard() {
         return (
           <SummaryPanel
             leftCardTitle="Net Worth"
-            leftCardText={netWorth}
+            leftCardText={'$'+netWorth}
             rightCardTitle="Monthly Cash Flow"
-            rightCardText="+$120"
+            rightCardText={"+$"+cashFlow}
           />
         );
       case "Budgets":

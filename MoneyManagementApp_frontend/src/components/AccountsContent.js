@@ -149,6 +149,24 @@ const handleBlurSave = async (tableName,row) => {
     console.error("Failed to save row", err);
   }
 };
+const handleDelete=async (tableName,row) =>{
+  try {
+    await fetch(`http://localhost:8080/tables/deleteTable/${tableName}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body:JSON.stringify({ 
+            id : Number(row.id),
+            description: row.description,
+            transactionDate: row.date,
+            foreignReferenceTable: row.account,
+            send:  Number(row.send),
+            receive:  Number(row.receive)
+        }),
+    });
+  } catch (err) {
+    console.error("Failed to save row", err);
+  }
+}
   return (
     // 1. Everything must be inside this main container
     <div className="accounts-container">
