@@ -53,7 +53,7 @@ function AccountFormWindow({ onClose, onSubmit}) {
                 onChange={(e) => setBudget(e.target.value)}
               />
             </div>
-
+            
 
             <button type="submit" className="tfw-save-btn">
                 Save Account

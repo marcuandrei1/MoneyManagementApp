@@ -35,7 +35,7 @@ function BudgetsContent() {
     setPage(value); // value = new page number
   };
   async function getBudgets() {
-    const url = `http://localhost:8080/tables/getBudgetTable?rowsSkip=${(page-1)*15}`;
+    const url = `http://localhost:8080/tables/getMetadataTable?rowsSkip=${(page-1)*15}`;
     try{
       const response=await fetch(url);
       if(!response.ok){
@@ -59,7 +59,7 @@ function BudgetsContent() {
     }
   }
   async function updateBudgets(budgetTable) {
-    const url = `http://localhost:8080/tables/updateBudgetTable/${budgetTable.name}?budget=${budgetTable.allocated}`;
+    const url = `http://localhost:8080/tables/updateMetadataTable/${budgetTable.name}?budget=${budgetTable.allocated}`;
     try{
       const response=await fetch(url);
       if(!response.ok){

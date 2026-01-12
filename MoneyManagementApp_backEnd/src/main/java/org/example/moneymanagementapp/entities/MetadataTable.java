@@ -3,22 +3,24 @@ package org.example.moneymanagementapp.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "budget")
-public class BudgetTable {
+@Table(name = "metadata")
+public class MetadataTable {
 
     @Id
     private String ReferenceTable;
     private int budgetSum;
     private int remainingBudget;
+    private  String type;
 
-    public BudgetTable() {
+    public MetadataTable() {
         //generic constructor
     }
 
-    public BudgetTable(String ReferenceTable, int budgetSum,int remainingBudget) {
+    public MetadataTable(String ReferenceTable, int budgetSum, int remainingBudget, String type) {
         this.ReferenceTable = ReferenceTable;
         this.budgetSum = budgetSum;
         this.remainingBudget = remainingBudget;
+        this.type = type;
     }
     public String getForeignReferenceTable() {
         return ReferenceTable;

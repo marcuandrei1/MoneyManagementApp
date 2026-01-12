@@ -1,9 +1,9 @@
 package org.example.moneymanagementapp.controller;
 
-import org.example.moneymanagementapp.entities.BudgetTable;
+import org.example.moneymanagementapp.entities.MetadataTable;
 import org.example.moneymanagementapp.entities.GenericTable;
 import org.example.moneymanagementapp.entities.HistoryTable;
-import org.example.moneymanagementapp.services.BudgetTableService;
+import org.example.moneymanagementapp.services.MetadataTableService;
 import org.example.moneymanagementapp.services.GenericTableService;
 import org.example.moneymanagementapp.services.HistoryTableService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +23,15 @@ public class TablesController {
     @Autowired
     private HistoryTableService historyTableService;
     @Autowired
-    private BudgetTableService budgetTableService;
+    private MetadataTableService metadataTableService;
 
 
     ///GenericTable
     @PostMapping("/createTable/{tableName}")
-    public void createGenericTable(@PathVariable String tableName, @RequestParam int budget) {
+    public void createGenericTable(@PathVariable String tableName, @RequestParam int budget,@RequestParam String type) {
         genericTableService.createGenericTable(tableName);
-        BudgetTable toBeInserted = new BudgetTable(tableName, budget,budget);
-        budgetTableService.InsertBudgetTable(toBeInserted);
+        MetadataTable toBeInserted = new MetadataTable(tableName, budget,budget,type);
+        metadataTableService.InsertMetadataTable(toBeInserted);
     }
     @GetMapping("getTablesName")
     public ResponseEntity<List<String>> getAllGenericTables() {
@@ -42,8 +42,8 @@ public class TablesController {
         genericTableService.InsertGenericTable(tableName,genericTable);
         HistoryTable historyTable = new HistoryTable("Insert", tableName, genericTable.getTransactionDate(), genericTable.getDescription(), genericTable.getForeignReferenceTable(), genericTable.getSend(), genericTable.getReceive());
         historyTableService.InsertHistoryTable(historyTable);
-        budgetTableService.updateRemainingBudget(tableName,genericTable.getReceive()-genericTable.getSend());
-        budgetTableService.updateRemainingBudget(genericTable.getForeignReferenceTable(), genericTable.getSend()-genericTable.getReceive());
+        metadataTableService.updateRemainingBudget(tableName,genericTable.getReceive()-genericTable.getSend());
+        metadataTableService.updateRemainingBudget(genericTable.getForeignReferenceTable(), genericTable.getSend()-genericTable.getReceive());
     }
     @DeleteMapping("/deleteTable/{tableName}")
     public void  DeleteGenericTable(@PathVariable String tableName, @RequestParam int id) {
@@ -54,8 +54,9 @@ public class TablesController {
         genericTableService.updateGenericTable(tableName, genericTable);
         HistoryTable historyTable = new HistoryTable("Update", tableName, genericTable.getTransactionDate(), genericTable.getDescription(), genericTable.getForeignReferenceTable(), genericTable.getSend(), genericTable.getReceive());
         historyTableService.InsertHistoryTable(historyTable);
-        budgetTableService.updateRemainingBudget(tableName,genericTable.getReceive()-genericTable.getSend());
-        budgetTableService.updateRemainingBudget(genericTable.getForeignReferenceTable(), genericTable.getSend()-genericTable.getReceive());
+        //trebuie modificat putin sa fie remaining budget-valoarea veche+ valoarea noua(valoarea fiind receive-send) si invers la celalt tabel
+        //metadataTableService.updateRemainingBudget(tableName,genericTable.getReceive()-genericTable.getSend());
+        //metadataTableService.updateRemainingBudget(genericTable.getForeignReferenceTable(), genericTable.getSend()-genericTable.getReceive());
     }
     @GetMapping("/getTable/{tableName}")
     public ResponseEntity<List<GenericTable>> getGenericTable(@PathVariable String tableName, @RequestParam int rowsSkip) {
@@ -68,14 +69,18 @@ public class TablesController {
         return ResponseEntity.ok().header("totalRows",String.valueOf(historyTableService.getNumberOfRows())).body( historyTableService.getRequestedHistoryTables(numberOfEntries,rowsSkip));
     }
 
-    ///Budget Table
-    @GetMapping("/updateBudgetTable/{tableName}")
-    public void updateBudgetTable(@PathVariable String tableName, @RequestParam int budget) {
+    ///Metadata Table
+    @GetMapping("/updateMetadataTable/{tableName}")
+    public void updateMetadataTable(@PathVariable String tableName, @RequestParam int budget) {
 
-        budgetTableService.updateBudget(tableName,budget);
+        metadataTableService.updateBudget(tableName,budget);
     }
-    @GetMapping("/getBudgetTable")
-    public ResponseEntity<List<BudgetTable>> getAllBudgetTables(@RequestParam int rowsSkip) {
-        return ResponseEntity.ok().header("totalRows",String.valueOf(budgetTableService.getNumberOfRows())).body(budgetTableService.getBudgetTable(rowsSkip));
+    @GetMapping("/getMetadataTable")
+    public ResponseEntity<List<MetadataTable>> getMetadataTable(@RequestParam int rowsSkip) {
+        return ResponseEntity.ok().header("totalRows",String.valueOf(metadataTableService.getNumberOfRows())).body(metadataTableService.getMetadataTable(rowsSkip));
+    }
+    @GetMapping("/getNetWorth")
+    public float getNetWorth() {
+        return metadataTableService.getNetWorth();
     }
 }
