@@ -1,6 +1,6 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import Window from "./components/Window";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   const [message, setMessage] = useState("Default");
@@ -10,7 +10,7 @@ function App() {
     'setMessage' - functia care modifica starea (actualizeaza valoarea lui message)
     'useState('')' - seteaza valoarea initiala a starii (in cazul meu un string gol"")
   */
-  return <Window />;
+  return <Dashboard />;
 }
 
 export default App;

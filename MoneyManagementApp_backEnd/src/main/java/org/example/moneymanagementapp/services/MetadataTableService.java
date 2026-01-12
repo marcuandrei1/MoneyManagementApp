@@ -8,6 +8,7 @@ import org.example.moneymanagementapp.repos.MetadataTableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -45,7 +46,7 @@ public class MetadataTableService {
             budgetTableRepository.save(toBeUpdated);
         }
     }
-    public float getNetWorth(){
-        return (float)entityManager.createNativeQuery("SELECT SUM(metadata.remainingBudget) from metadata where type='active';").getSingleResult();
+    public BigDecimal getNetWorth(){
+        return (BigDecimal) entityManager.createNativeQuery("SELECT SUM(metadata.remainingBudget) from metadata where type='active';").getSingleResult();
     }
 }

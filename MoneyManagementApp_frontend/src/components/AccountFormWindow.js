@@ -26,7 +26,7 @@ function AccountFormWindow({ onClose, onSubmit }) {
   };
 
   async function createNewTable(tableName, budget) {
-    const url = `http://localhost:8080/tables/createTable/${tableName}?budget=${budget}`;
+    const url = `http://localhost:8080/tables/createTable/${tableName}?budget=${budget}&type=${accountType}`;
     try {
       const response = await fetch(url, {
         method: "POST",

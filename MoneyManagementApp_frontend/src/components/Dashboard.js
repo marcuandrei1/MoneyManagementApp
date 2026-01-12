@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import ContentWindow from "./ContentWindow";
@@ -7,11 +7,30 @@ import SummaryPanel from "./SummaryPanel";
 import AccountsContent from "./AccountsContent";
 import BudgetsContent from "./BudgetsContent";
 
-function Window() {
+function Dashboard() {
   const [isMinimized, setIsMinimized] = useState(false);
-
+  const [netWorth, setNetWorth] = useState(0);
   const [activeView, setActiveView] = useState("Dashboard");
 
+  async function getNetWorth() {
+    const url = `http://localhost:8080/tables/getNetWorth`;
+    try{
+      const response=await fetch(url);
+      const data = await response.json();
+      if(!response.ok){
+        throw new Error(`Response status: ${response.status}`);
+      }
+      setNetWorth(data);
+    }catch (error) {
+      console.error(error.message);
+    }  
+  }
+  useEffect(() => {
+      const fetchData=async () => {
+         await getNetWorth(); 
+      }
+      fetchData();
+    }, []); 
   const handleViewChange = (viewName) => {
     setActiveView(viewName);
   };
@@ -24,7 +43,7 @@ function Window() {
         return (
           <SummaryPanel
             leftCardTitle="Net Worth"
-            leftCardText="$2,120"
+            leftCardText={netWorth}
             rightCardTitle="Monthly Cash Flow"
             rightCardText="+$120"
           />
@@ -54,4 +73,4 @@ function Window() {
   );
 }
 
-export default Window;
+export default Dashboard;

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000",
@@ -80,7 +81,7 @@ public class TablesController {
         return ResponseEntity.ok().header("totalRows",String.valueOf(metadataTableService.getNumberOfRows())).body(metadataTableService.getMetadataTable(rowsSkip));
     }
     @GetMapping("/getNetWorth")
-    public float getNetWorth() {
+    public BigDecimal getNetWorth() {
         return metadataTableService.getNetWorth();
     }
 }
