@@ -6,6 +6,7 @@ import "../styles/windowStyle.css";
 import SummaryPanel from "./SummaryPanel";
 import AccountsContent from "./AccountsContent";
 import BudgetsContent from "./BudgetsContent";
+import DashboardGraph from "./DashboardGraph";
 
 function Dashboard() {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -15,36 +16,37 @@ function Dashboard() {
 
   async function getNetWorth() {
     const url = `http://localhost:8080/tables/getNetWorth`;
-    try{
-      const response=await fetch(url);
+    try {
+      const response = await fetch(url);
       const data = await response.json();
-      if(!response.ok){
+      if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
       setNetWorth(data);
-    }catch (error) {
+    } catch (error) {
       console.error(error.message);
-    }  
-  }async function getCashFlow() {
+    }
+  }
+  async function getCashFlow() {
     const url = `http://localhost:8080/tables/getCashFlow`;
-    try{
-      const response=await fetch(url);
+    try {
+      const response = await fetch(url);
       const data = await response.json();
-      if(!response.ok){
+      if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
       setCashFlow(data);
-    }catch (error) {
+    } catch (error) {
       console.error(error.message);
-    }  
+    }
   }
   useEffect(() => {
-      const fetchData=async () => {
-         await getNetWorth();
-         await getCashFlow(); 
-      }
-      fetchData();
-    }, [activeView]); 
+    const fetchData = async () => {
+      await getNetWorth();
+      await getCashFlow();
+    };
+    fetchData();
+  }, [activeView]);
   const handleViewChange = (viewName) => {
     setActiveView(viewName);
   };
@@ -55,12 +57,27 @@ function Dashboard() {
         return <AccountsContent />;
       case "Dashboard":
         return (
-          <SummaryPanel
-            leftCardTitle="Net Worth"
-            leftCardText={'$'+netWorth}
-            rightCardTitle="Monthly Cash Flow"
-            rightCardText={"+$"+cashFlow}
-          />
+          <>
+            <SummaryPanel
+              leftCardTitle="Net Worth"
+              leftCardText={"$" + netWorth}
+              rightCardTitle="Monthly Cash Flow"
+              rightCardText={"+$" + cashFlow}
+            />
+
+            <h1
+              style={{
+                marginTop: "40px",
+                marginLeft: "400px",
+                color: "#ffffff",
+                fontSize: "23px",
+                fontWeight: 600,
+              }}
+            >
+              Expenses{" "}
+            </h1>
+            <DashboardGraph />
+          </>
         );
       case "Budgets":
         return <BudgetsContent />;

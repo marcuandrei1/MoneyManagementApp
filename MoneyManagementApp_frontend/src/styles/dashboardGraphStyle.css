@@ -1,0 +1,23 @@
+.dashboard-graph {
+  width: 50%;
+  margin-top: 80px;
+}
+
+/* text axe */
+.dashboard-bar-chart .MuiChartsAxis-label {
+  fill: #ffffff;
+}
+
+.dashboard-bar-chart .MuiChartsAxis-tickLabel {
+  fill: #ffffff;
+}
+
+/* text axa X */
+.dashboard-bar-chart .MuiChartsXAxis-root text {
+  fill: #ffffff;
+}
+
+/* text axa Y */
+.dashboard-bar-chart .MuiChartsYAxis-root text {
+  fill: #ffffff;
+}
