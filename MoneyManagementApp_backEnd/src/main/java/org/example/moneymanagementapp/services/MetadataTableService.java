@@ -25,7 +25,7 @@ public class MetadataTableService {
 
     public List<MetadataTable> getMetadataTable(int rowsSkip) {
         String query = "SELECT ReferenceTable, budgetSum, remainingBudget \n" +
-                "FROM metadata ORDER BY ReferenceTable LIMIT "+rowsSkip+",15;";
+                "FROM metadata WHERE type = 'Cheltuieli' ORDER BY ReferenceTable LIMIT "+rowsSkip+",15;";
 
         Query statement = entityManager.createNativeQuery(query);
         return statement.getResultList();
@@ -39,7 +39,7 @@ public class MetadataTableService {
     public void updateRemainingBudget(String tableName,int remainingBudget) {
         MetadataTable toBeUpdated = budgetTableRepository.findById(tableName).orElse(null);
         if(toBeUpdated != null) {
-            toBeUpdated.setRemainingBudget(toBeUpdated.getRemainingBudget()+remainingBudget);
+            toBeUpdated.setRemainingBudget(toBeUpdated.getRemainingBudget()-remainingBudget);
             budgetTableRepository.save(toBeUpdated);
         }
     }
@@ -52,7 +52,7 @@ public class MetadataTableService {
         }
     }
     public BigDecimal getNetWorth(){
-        return (BigDecimal) entityManager.createNativeQuery("SELECT SUM(metadata.remainingBudget) from metadata where type='active';").getSingleResult();
+        return (BigDecimal) entityManager.createNativeQuery("SELECT SUM(ABS(metadata.budgetSum-metadata.remainingBudget)) from metadata where type='active';").getSingleResult();
     }
     @Transactional
     public HashMap<String,BigDecimal> getCashFlow(){

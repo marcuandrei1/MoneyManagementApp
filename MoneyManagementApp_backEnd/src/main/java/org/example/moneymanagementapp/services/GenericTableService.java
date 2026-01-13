@@ -31,7 +31,7 @@ public class GenericTableService {
         entityManager.createNativeQuery(query).executeUpdate();
     }
     public List<String> getAllGenericTables() {
-        return  entityManager.createNativeQuery("SHOW TABLES WHERE tables_in_test NOT IN ('history', 'budget');").getResultList();
+        return  entityManager.createNativeQuery("SHOW TABLES WHERE tables_in_test NOT IN ('history', 'metadata');").getResultList();
     }
     public void InsertGenericTable(String tableName, GenericTable genericTable) {
         String query="INSERT INTO "+tableName+"(TRANSACTIONDATE, DESCRIPTION,foreignReferenceTable, SEND, RECEIVE) VALUES\n" +
