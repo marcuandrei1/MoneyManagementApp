@@ -27,23 +27,12 @@ function Dashboard() {
       console.error(error.message);
     }
   }
-  async function getCashFlow() {
-    const url = `http://localhost:8080/tables/getCashFlow`;
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-      setCashFlow(data);
-    } catch (error) {
-      console.error(error.message);
-    }
+  const setCashFlowValue=(value) =>{
+      setCashFlow(value);
   }
   useEffect(() => {
     const fetchData = async () => {
       await getNetWorth();
-      await getCashFlow();
     };
     fetchData();
   }, [activeView]);
@@ -76,7 +65,7 @@ function Dashboard() {
             >
               Expenses{" "}
             </h1>
-            <DashboardGraph />
+            <DashboardGraph setCashFlowValue={setCashFlowValue}/>
           </>
         );
       case "Budgets":

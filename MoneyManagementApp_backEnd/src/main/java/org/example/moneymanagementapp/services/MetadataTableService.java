@@ -31,7 +31,7 @@ public class MetadataTableService {
         return statement.getResultList();
     }
     public long getNumberOfRows(){
-        return (long) entityManager.createNativeQuery("SELECT COUNT(*) from metadata").getSingleResult();
+        return (long) entityManager.createNativeQuery("SELECT COUNT(*) from metadata where type='Cheltuieli'").getSingleResult();
     }
     public void InsertMetadataTable(MetadataTable budgetTable) {
         budgetTableRepository.save(budgetTable);
@@ -73,7 +73,7 @@ public class MetadataTableService {
                     "'SELECT IFNULL(SUM(CASE WHEN source_type=''Venituri'' THEN amount END),0) - " +
                     "IFNULL(SUM(CASE WHEN source_type=''Cheltuieli'' THEN amount END),0) AS cashFlow " +
                     "FROM (', @union_sql, ') AS combined " +
-                    "WHERE DATE_FORMAT(transactionDate,''%Y-%m-01'') = DATE_SUB(DATE_FORMAT(now(), ''%Y-%m-01''),INTERVAL'+i+'MONTH )'" +
+                    "WHERE DATE_FORMAT(transactionDate,''%Y-%m-01'') = DATE_SUB(DATE_FORMAT(now(), ''%Y-%m-01''), INTERVAL " + i + " MONTH)'" +
                     ");";
             entityManager.createNativeQuery(filterQuery).executeUpdate();
 
