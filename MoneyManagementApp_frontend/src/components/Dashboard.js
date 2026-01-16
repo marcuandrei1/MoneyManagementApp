@@ -7,6 +7,7 @@ import SummaryPanel from "./SummaryPanel";
 import AccountsContent from "./AccountsContent";
 import BudgetsContent from "./BudgetsContent";
 import DashboardGraph from "./DashboardGraph";
+import DashboardRecentTransactionComponent from "./DashboardRecentTransactionsComponent";
 
 function Dashboard() {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -27,9 +28,9 @@ function Dashboard() {
       console.error(error.message);
     }
   }
-  const setCashFlowValue=(value) =>{
-      setCashFlow(value);
-  }
+  const setCashFlowValue = (value) => {
+    setCashFlow(value);
+  };
   useEffect(() => {
     const fetchData = async () => {
       await getNetWorth();
@@ -65,7 +66,17 @@ function Dashboard() {
             >
               Expenses{" "}
             </h1>
-            <DashboardGraph setCashFlowValue={setCashFlowValue}/>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "40px",
+              }}
+            >
+              <DashboardGraph setCashFlowValue={setCashFlowValue} />
+
+              <DashboardRecentTransactionComponent />
+            </div>
           </>
         );
       case "Budgets":
