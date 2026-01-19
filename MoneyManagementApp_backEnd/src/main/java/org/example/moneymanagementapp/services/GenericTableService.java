@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import org.example.moneymanagementapp.entities.GenericTable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.Month;
 import java.util.List;
 import java.util.Objects;
 
@@ -143,10 +145,66 @@ public class GenericTableService {
     public long getNumberOfRows(String tableName){
         return (long) entityManager.createNativeQuery("SELECT COUNT(*) from "+tableName).getSingleResult();
     }
+    public int getLastRowID(String tableName){
+        return (int) entityManager.createNativeQuery("SELECT id from "+tableName+" ORDER BY id DESC LIMIT 1").getSingleResult();
+    }
     public List<GenericTable> getGenericTable(String tableName,int rowsSkip) {
        return entityManager.createNativeQuery("SELECT id, transactionDate,description,foreignReferenceTable, send,receive,SUM(receive - send)\n" +
                "OVER (ORDER BY transactionDate, id) AS balance\n" +
                "FROM "+tableName +"\n"+
                " ORDER BY transactionDate DESC, id DESC LIMIT "+rowsSkip+",13;").getResultList();
+    }
+    public long getLastAmount(String tableName,int id){
+        return (long) entityManager.createNativeQuery("SELECT (receive-send) as amount from "+tableName+" WHERE id="+id).getSingleResult();
+    }
+    @Transactional
+    public BigDecimal getNumberOfTransactions(){
+        String groupConcatQuery="SET SESSION group_concat_max_len = 1000000;";
+        entityManager.createNativeQuery(groupConcatQuery).executeUpdate();
+        String unionQuery =
+                "SET @union_sql = (SELECT GROUP_CONCAT(CONCAT( 'SELECT COUNT(*) as count FROM `',\n" +
+                        "                                              ReferenceTable, '`'  ) SEPARATOR ' UNION ALL ' )\n" +
+                        "                                              FROM metadata );";
+        entityManager.createNativeQuery(unionQuery).executeUpdate();
+
+        entityManager.createNativeQuery(unionQuery).executeUpdate();
+        String filterQuery =
+                "SET @sql = CONCAT(" +
+                        "'SELECT sum(count) " +
+                        "FROM (', @union_sql, ') AS combined '); ";
+        entityManager.createNativeQuery(filterQuery).executeUpdate();
+
+        entityManager.createNativeQuery("PREPARE stmt FROM @sql;").executeUpdate();
+        BigDecimal numberOfTransactions= (BigDecimal) entityManager.createNativeQuery("EXECUTE stmt;").getSingleResult();
+
+        entityManager.createNativeQuery("DEALLOCATE PREPARE stmt;").executeUpdate();
+
+        return numberOfTransactions;
+    }
+    @Transactional
+    public List<GenericTable> getAllTransactions(int rowsSkip){
+        String groupConcatQuery="SET SESSION group_concat_max_len = 1000000;";
+        entityManager.createNativeQuery(groupConcatQuery).executeUpdate();
+        String unionQuery =
+                "SET @union_sql = (SELECT GROUP_CONCAT(CONCAT( 'SELECT `id`,`transactionDate`, `description`, `send`, `receive`, ', '''',metadata.ReferenceTable, ''' AS sourceTable', ' FROM `',\n" +
+                        "                                              ReferenceTable, '`'  ) SEPARATOR ' UNION ALL ' )\n" +
+                        "                                              FROM metadata );";
+        entityManager.createNativeQuery(unionQuery).executeUpdate();
+        String filterQuery =
+                "SET @sql = CONCAT(" +
+                        "'SELECT id,sourceTable, transactionDate, description, send, receive, " +
+                        "SUM(receive - send) OVER (ORDER BY transactionDate, id) AS balance " +
+                        "FROM (', @union_sql, ') AS combined " +
+                        "ORDER BY transactionDate DESC, id DESC LIMIT " + rowsSkip + ", 13'" +
+                        ");";
+        entityManager.createNativeQuery(filterQuery).executeUpdate();
+
+        entityManager.createNativeQuery("PREPARE stmt FROM @sql;").executeUpdate();
+        List<GenericTable> rows= entityManager.createNativeQuery("EXECUTE stmt;").getResultList();
+
+        entityManager.createNativeQuery("DEALLOCATE PREPARE stmt;").executeUpdate();
+
+        return rows;
+
     }
 }

@@ -14,17 +14,19 @@ public class GenericTable {
     private String foreignReferenceTable;
     private int send;
     private int receive;
+    private int amount;
 
     public GenericTable() {
         // Default constructor
     }
 
-    public GenericTable(String foreignReferenceTable,String description, LocalDate transactionDate, int receive, int send) {
+    public GenericTable(String foreignReferenceTable,String description, LocalDate transactionDate, int receive, int send,int amount) {
         this.foreignReferenceTable = foreignReferenceTable;
         this.description = description;
         this.transactionDate = transactionDate;
         this.receive = receive;
         this.send = send;
+        this.amount = amount;
     }
 
     public String getForeignReferenceTable() {

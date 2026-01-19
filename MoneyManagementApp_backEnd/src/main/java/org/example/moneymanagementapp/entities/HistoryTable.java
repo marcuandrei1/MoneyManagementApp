@@ -10,6 +10,7 @@ public class HistoryTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private int idRow;
     private String action;
     private String originalTable;
     private LocalDate transactionDate;
@@ -19,12 +20,15 @@ public class HistoryTable {
     private String foreignReferenceTable;
     private int send;
     private int receive;
+    @Column(name = "amount", insertable = false, updatable = false)
+    private int amount;
 
     public HistoryTable() {
         // Default constructor
     }
 
-    public HistoryTable(String action, String originalTable, LocalDate transactionDate, String description, String foreignReferenceTable, int send, int receive) {
+    public HistoryTable(int idRow,String action, String originalTable, LocalDate transactionDate, String description, String foreignReferenceTable, int send, int receive) {
+        this.idRow = idRow;
         this.action = action;
         this.originalTable = originalTable;
         this.transactionDate = transactionDate;
@@ -36,6 +40,21 @@ public class HistoryTable {
 
     public String getAction() {
         return action;
+    }
+    public int getIdROw() {
+        return idRow;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public String getOriginalTable() {
+        return originalTable;
     }
 
     public void setAction(String action) {

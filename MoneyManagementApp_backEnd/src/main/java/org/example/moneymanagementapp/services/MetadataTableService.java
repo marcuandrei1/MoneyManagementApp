@@ -55,7 +55,7 @@ public class MetadataTableService {
         return (BigDecimal) entityManager.createNativeQuery("SELECT SUM(ABS(metadata.budgetSum-metadata.remainingBudget)) from metadata where type='active';").getSingleResult();
     }
     @Transactional
-    public HashMap<String,BigDecimal> getCashFlow(){
+    public HashMap<String,BigDecimal> getCashFlowPerMonth(){
         HashMap<String,BigDecimal> cashFlowPerMonth = new HashMap<>();
         String unionQuery = "SET @union_sql = (" +
                 "SELECT GROUP_CONCAT(" +

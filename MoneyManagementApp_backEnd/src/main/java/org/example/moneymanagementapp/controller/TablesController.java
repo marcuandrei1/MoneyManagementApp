@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000",
             exposedHeaders = "totalRows"
@@ -42,7 +43,7 @@ public class TablesController {
     @PostMapping("/insertTable/{tableName}")
     public void InsertGenericTable(@PathVariable String tableName, @RequestBody GenericTable genericTable) {
         genericTableService.InsertGenericTable(tableName,genericTable);
-        HistoryTable historyTable = new HistoryTable("Insert", tableName, genericTable.getTransactionDate(), genericTable.getDescription(), genericTable.getForeignReferenceTable(), genericTable.getSend(), genericTable.getReceive());
+        HistoryTable historyTable = new HistoryTable(genericTableService.getLastRowID(tableName),"Insert", tableName, genericTable.getTransactionDate(), genericTable.getDescription(), genericTable.getForeignReferenceTable(), genericTable.getSend(), genericTable.getReceive());
         historyTableService.InsertHistoryTable(historyTable);
         metadataTableService.updateRemainingBudget(tableName,genericTable.getReceive()-genericTable.getSend());
         metadataTableService.updateRemainingBudget(genericTable.getForeignReferenceTable(), genericTable.getSend()-genericTable.getReceive());
@@ -53,12 +54,13 @@ public class TablesController {
     }
     @PostMapping("/updateTable/{tableName}")
     public void UpdateGenericTable(@PathVariable String tableName, @RequestBody GenericTable genericTable) {
+        int lastAmount=(int) genericTableService.getLastAmount(tableName,genericTable.getId());
         genericTableService.updateGenericTable(tableName, genericTable);
-        HistoryTable historyTable = new HistoryTable("Update", tableName, genericTable.getTransactionDate(), genericTable.getDescription(), genericTable.getForeignReferenceTable(), genericTable.getSend(), genericTable.getReceive());
+        HistoryTable historyTable = new HistoryTable(genericTable.getId(),"Update", tableName, genericTable.getTransactionDate(), genericTable.getDescription(), genericTable.getForeignReferenceTable(), genericTable.getSend(), genericTable.getReceive());
         historyTableService.InsertHistoryTable(historyTable);
-        //trebuie modificat putin sa fie remaining budget-valoarea veche+ valoarea noua(valoarea fiind receive-send) si invers la celalt tabel
-        //metadataTableService.updateRemainingBudget(tableName,genericTable.getReceive()-genericTable.getSend());
-        //metadataTableService.updateRemainingBudget(genericTable.getForeignReferenceTable(), genericTable.getSend()-genericTable.getReceive());
+        //trebuie modificat putin sa fie remaining budget-(-valoarea veche+ valoarea noua)(valoarea fiind receive-send) si invers la celalt tabel
+        metadataTableService.updateRemainingBudget(tableName,(genericTable.getReceive()-genericTable.getSend())-lastAmount);
+        metadataTableService.updateRemainingBudget(genericTable.getForeignReferenceTable(), (genericTable.getSend()-genericTable.getReceive())+lastAmount);
     }
     @GetMapping("/getTable/{tableName}")
     public ResponseEntity<List<GenericTable>> getGenericTable(@PathVariable String tableName, @RequestParam int rowsSkip) {
@@ -66,10 +68,15 @@ public class TablesController {
     }
 
     ///History Table
-    @GetMapping("/getHistoryTable")
-    public ResponseEntity<List<HistoryTable>> getAllGenericTables(@RequestParam int numberOfEntries, @RequestParam int rowsSkip) {
-        return ResponseEntity.ok().header("totalRows",String.valueOf(historyTableService.getNumberOfRows())).body( historyTableService.getRequestedHistoryTables(numberOfEntries,rowsSkip));
+    @GetMapping("/getRecentTransactions")
+    public ResponseEntity<List<HistoryTable>> getRecentTransactions(@RequestParam int numberOfEntries) {
+        return ResponseEntity.ok().body( historyTableService.getRequestedHistoryTables(numberOfEntries));
     }
+    @GetMapping("/getTransactionTable")
+    public ResponseEntity<List<GenericTable>> getTransactionTable( @RequestParam int rowsSkip) {
+        return ResponseEntity.ok().header("totalRows",String.valueOf(genericTableService.getNumberOfTransactions())).body(genericTableService.getAllTransactions(rowsSkip));
+    }
+
 
     ///Metadata Table
     @GetMapping("/updateMetadataTable/{tableName}")
@@ -86,7 +93,7 @@ public class TablesController {
         return metadataTableService.getNetWorth();
     }
     @GetMapping("/getCashFlow")
-    public HashMap<String, BigDecimal> getCashFlow(){
-        return metadataTableService.getCashFlow();
+    public Map<String, BigDecimal> getCashFlow(){
+        return metadataTableService.getCashFlowPerMonth();
     }
 }

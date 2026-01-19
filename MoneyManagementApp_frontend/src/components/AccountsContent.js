@@ -18,7 +18,7 @@ function AccountsContent() {
   const [editing, setEditing] = useState(null);
 
   async function getTransactionTable(numberOfEntries) {
-    const url = `http://localhost:8080/tables/getHistoryTable?numberOfEntries=${numberOfEntries}&rowsSkip=${page*13}`;
+    const url = `http://localhost:8080/tables/getTransactionTable?rowsSkip=${page*13}`;
     try{
       const response=await fetch(url);
       if(!response.ok){
@@ -131,7 +131,6 @@ function AccountsContent() {
 const handleBlurSave = async (tableName,row) => {
   setEditing(null); // exit edit mode immediately
   console.log(row);
-  
   try {
     await fetch(`http://localhost:8080/tables/updateTable/${tableName}`, {
       method: "POST",
@@ -258,10 +257,31 @@ const handleDelete=async (tableName,row) =>{
         <tbody>
           {displayedTransactions.map((item, index) => (
             <tr key={index}>
-              <td>
-                {item.date}
+              <td onClick={() =>selectedAccount==="Transactions" ? setEditing(null) : setEditing({ rowIndex: index, field: "date",prevValue: item.date })}>
+                {editing?.rowIndex === index && editing?.field === "date" ? (
+                  <input
+                    type="date" 
+                    autoFocus
+                    value={item.date}
+                    onChange={(e) =>
+                      handleCellChange(index, "date", e.target.value)
+                    }
+                    onBlur={() =>{
+                                const prevValue=editing.prevValue;
+                                if (!item.date || !item.date.toString().trim()) {
+                                // restore previous value if input is empty
+                                  handleCellChange(index, "date",prevValue);
+                                  setEditing(null);
+                                } else {
+                                  handleBlurSave(selectedAccount, item);
+                                }
+                            }}
+                  />
+                ) : (
+                  item.date
+                )}
               </td>
-              <td onClick={() => setEditing({ rowIndex: index, field: "description" })}>
+              <td onClick={() =>selectedAccount==="Transactions" ? setEditing(null) : setEditing({ rowIndex: index, field: "description",prevValue: item.description })}>
                 {editing?.rowIndex === index && editing?.field === "description" ? (
                   <input
                     type="text" 
@@ -270,15 +290,94 @@ const handleDelete=async (tableName,row) =>{
                     onChange={(e) =>
                       handleCellChange(index, "description", e.target.value)
                     }
-                    onBlur={() => handleBlurSave(selectedAccount,item)}
+                    onBlur={() =>{
+                                const prevValue=editing.prevValue;
+                                if (item.description=="") {
+                                // restore previous value if input is empty
+                                  
+                                  handleCellChange(index, "description",prevValue);
+                                  setEditing(null);
+                                } else {
+                                  handleBlurSave(selectedAccount, item);
+                                }
+                            }}
                   />
                 ) : (
                   item.description
                 )}
               </td>
-              <td>{item.account}</td>
-              <td>{item.send}</td>
-              <td>{item.receive}</td>
+              <td onClick={() =>selectedAccount==="Transactions" ? setEditing(null) : setEditing({ rowIndex: index, field: "account",prevValue: item.account })}>
+                {editing?.rowIndex === index && editing?.field === "account" ? (
+                  <input
+                    type="text" 
+                    autoFocus
+                    value={item.account}
+                    onChange={(e) =>
+                      handleCellChange(index, "account", e.target.value)
+                    }
+                    onBlur={() =>{
+                                const prevValue=editing.prevValue;
+                                if (!item.account.trim()) {
+                                // restore previous value if input is empty
+                                  handleCellChange(index, "account",prevValue);
+                                  setEditing(null);
+                                } else {
+                                  handleBlurSave(selectedAccount, item);
+                                }
+                            }}
+                  />
+                ) : (
+                  item.account
+                )}
+              </td>
+              <td onClick={() =>selectedAccount==="Transactions" ? setEditing(null) : setEditing({ rowIndex: index, field: "send",prevValue: item.send })}>
+                {editing?.rowIndex === index && editing?.field === "send" ? (
+                  <input
+                    type="text" 
+                    autoFocus
+                    value={item.send}
+                    onChange={(e) =>
+                      handleCellChange(index, "send", e.target.value)
+                    }
+                    onBlur={() =>{
+                                const prevValue=editing.prevValue;
+                                if (item.send === "" || item.send === null || isNaN(item.send)) {
+                                // restore previous value if input is empty
+                                  handleCellChange(index, "send",prevValue);
+                                  setEditing(null);
+                                } else {
+                                  handleBlurSave(selectedAccount, item);
+                                }
+                            }}
+                  />
+                ) : (
+                  item.send
+                )}
+              </td>
+              <td onClick={() =>selectedAccount==="Transactions" ? setEditing(null) : setEditing({ rowIndex: index, field: "receive",prevValue: item.receive })}>
+                {editing?.rowIndex === index && editing?.field === "receive" ? (
+                  <input
+                    type="text" 
+                    autoFocus
+                    value={item.receive}
+                    onChange={(e) =>
+                      handleCellChange(index, "receive", e.target.value)
+                    }
+                    onBlur={() =>{
+                                const prevValue=editing.prevValue;
+                                if (item.receive === "" || item.receive === null || isNaN(item.receive)) {
+                                // restore previous value if input is empty
+                                  handleCellChange(index, "receive",prevValue);
+                                  setEditing(null);
+                                } else {
+                                  handleBlurSave(selectedAccount, item);
+                                }
+                            }}
+                  />
+                ) : (
+                  item.receive
+                )}
+              </td>
               <td>{item.amount}</td>
             </tr>
           ))}
