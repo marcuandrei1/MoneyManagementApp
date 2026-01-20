@@ -57,11 +57,12 @@ public class MetadataTableService {
     @Transactional
     public HashMap<String,BigDecimal> getCashFlowPerMonth(){
         HashMap<String,BigDecimal> cashFlowPerMonth = new HashMap<>();
+        entityManager.createNativeQuery("SET SESSION group_concat_max_len = 1000000").executeUpdate();
         String unionQuery = "SET @union_sql = (" +
                 "SELECT GROUP_CONCAT(" +
                 "  CASE " +
-                "    WHEN type='Venituri' THEN CONCAT('SELECT ''Venituri'' AS source_type, IFNULL(`receive`,0) AS amount, `transactionDate` FROM `', ReferenceTable, '`') " +
-                "    WHEN type='Cheltuieli' THEN CONCAT('SELECT ''Cheltuieli'' AS source_type, IFNULL(`send`,0) AS amount, `transactionDate` FROM `', ReferenceTable, '`') " +
+                "    WHEN type='Venituri' THEN CONCAT('SELECT ''Venituri'' AS source_type, IFNULL(`send`,0) AS amount, `transactionDate` FROM `', ReferenceTable, '`') " +
+                "    WHEN type='Cheltuieli' THEN CONCAT('SELECT ''Cheltuieli'' AS source_type, IFNULL(`receive`,0) AS amount, `transactionDate` FROM `', ReferenceTable, '`') " +
                 "  END " +
                 "  SEPARATOR ' UNION ALL '" +
                 ") FROM metadata WHERE type IN ('Venituri','Cheltuieli')" +
@@ -80,12 +81,12 @@ public class MetadataTableService {
             entityManager.createNativeQuery("PREPARE stmt FROM @sql;").executeUpdate();
 
             Object singleResult = entityManager.createNativeQuery("EXECUTE stmt;").getSingleResult();
-            BigDecimal result = new BigDecimal(singleResult.toString());
+            BigDecimal result = (BigDecimal) singleResult;
 
             entityManager.createNativeQuery("DEALLOCATE PREPARE stmt;").executeUpdate();
-
             cashFlowPerMonth.put(Month.of(currentMonth-i).toString(), result);
         }
+        System.out.println(cashFlowPerMonth.get("JANUARY"));
         return cashFlowPerMonth;
     }
 }

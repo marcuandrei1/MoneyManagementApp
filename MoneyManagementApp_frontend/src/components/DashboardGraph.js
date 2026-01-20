@@ -21,6 +21,8 @@ export default function DashboardGraph({setCashFlowValue}) {
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
+      console.log(data);
+      
       setCashFlowPerMonth(data);
       setCashFlowValue(data.JANUARY);
       
